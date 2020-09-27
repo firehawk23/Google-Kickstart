@@ -1,27 +1,35 @@
 Analysis
 --------
-Firstly, denote Ki as the number of times a person will use the ATM. Formally, Ki = ⌈Ai / X⌉.
+Consider given time intervals as an array. We will refer to the start time of i-th interval as Si and to the end time of i-th interval as Ei.
 
-Test Set 1
+Let us sort the time interval array by start time in ascending order. To start the harvesting, we need to deploy our first robot at the start time of the first interval (S1) in the sorted array. It is not optimal to deploy the robot before S1 because we would be wasting robot hours. Per the problem statement, our first robot can be deployed from S1 to S1 + K before it returns for calibration. Let us define interval length of i-th interval as interval_lengthi = Ei - Si.
+The following cases are possible for our first robot:
+
+1. interval_length1 > K : In this case, as soon as our first robot finishes, we need to deploy another robot to cover the remaining part of the interval.
+
+2.interval_length1 ≤ K : This can be further divided in two cases:
+  
+  a.) Bring the first robot back as soon as the first interval finishes. We cannot re-deploy this robot since a robot can only harvest for consecutive units of time.
+  
+  b.)Allow the first robot to be available until K units of time has elapsed. This is a better strategy since it allows us to utilize the robot for future harvesting.
+
+Based on the above scenarios, the optimal strategy is to deploy a robot at the beginning of the first harvesting interval, for K hours. If after K hours the robot is inside the first or any subsequent harvesting interval, deploy another robot to replace it. Otherwise, deploy another robot as soon as the next harvesting interval begins. Repeat this for every interval and keep count of the number of total deployments.
+
+Test Set 1:
 **********
-We can directly simulate the process using a queue.
+For this test set we can loop over sorted time intervals and then have another inner loop to go over each point in time of such interval.
+At the i-th point in time, if there is no robot currently deployed for harvesting, we can deploy a robot and keep it harvesting for K units of time. If a robot is already currently deployed for harvesting then no action is needed. The total number of robots deployed is the required answer.
+Since we are sorting the intevals array and then iterating over each point in time inside an interval, the worst case time complexity will be O( Σ1 ≤ i ≤ N interval_lengthi + N log N), where N is the total number of intervals and interval_lengthi ≤ 200.
 
-Assume that i-th person, that wants to withdraw Ai, is first in the queue. There are two possibilites:
+Test Set 2:
+***********
+To solve for this test case we need to find a way to count the number of robots needed for an interval without iterating over each point in time.
+Let us say we deploy a robot at S1. The number of robots needed for the first inteval can be calculated as ⌈interval_length1 / K ⌉.
+Let us define a variable last_harvest_time as the last point in time covered by all deployed robots and initialise it as 0. It is possible that the last robot deployed to cover the first interval will go beyond E1 hence the last_harvest_time after covering the first interval will be, last_harvest_time = max(last_harvest_time , S1) + number of robots needed for the first interval * K.
+For subsequent intervals:
 
-- Ai ≤ X. In that case, this person withdraws Ai and leaves the queue. We can add i to the answer.
-- Ai > X. In that case, this person withdraws X (thus setting Ai to Ai - X) and goes back to the end of the queue.
-Time complexity of this simulation is O(Σ Ki).
+If the interval is already fully covered with the last_harvest_time, no action is needed.
 
-In the worst case, when X = 1, Ki = Ai. Since Ai ≤ 100, the worst time complexity is O(N × 100), which easily fits into the time limit.
+1. If the interval is not fully covered by the last_harvest_time then follow a similar strategy as first interval to calculate the number of new robots required and again update the last_harvest_time. Also increment the answer by total number of new robots.
 
-Test Set 2
-**********
-In the second test set, Ki can be as big as 109, so direct simulation is too slow.
-
-Let's look at two people i and j. When will i-th person leave the queue before j-th person? There are two cases:
-
-- Ki < Kj. Since i-th person will use the ATM fewer times than j-th person, they will leave the queue earlier.
-- Ki = Kj and i < j. If they both use the ATM the same amount of times, the person earlier in the queue in the initial configuration will leave first.
-This observation is enough to form a full solution. Sort people first in ascending order of Ki, and in case of ties in ascending order of their number. After sorting, this is our answer.
-
-Time complexity of this solution is O(N log N).
+2.Since we are sorting the intervals array and then iterating over all intervals at once, the worst case time complexity will be O(N log N), where N is the total number of intervals.
