@@ -51,22 +51,22 @@ Sample
 
 In Sample Case #1, there are 3 people and the limit to withdraw in one turn is 3. Below 
 is step-by-step description of how the process will look like:
-1. The queue initially looks like [1, 2, 3]. The first person withdraws an amount of 2 in 
+#. The queue initially looks like [1, 2, 3]. The first person withdraws an amount of 2 in 
 their first attempt and leaves the queue.
-2. The queue now looks like [2, 3]. The second person wants to withdraw an amount of 
+#. The queue now looks like [2, 3]. The second person wants to withdraw an amount of 
 7, but they can withdraw only 3 in their first turn. Since they still need to withdraw an 
 amount of 4, they have to rejoin the queue at the end of the line.
-3. The queue now looks like [3, 2]. The third person needs to withdraw an amount of 4 
+#. The queue now looks like [3, 2]. The third person needs to withdraw an amount of 4 
 but they can only withdraw 3 in their first turn so, they rejoin the queue at the end of 
 the line to withdraw amount of 1 later.
-4. The queue now looks like [2, 3]. The second person still needs to withdraw an 
+#. The queue now looks like [2, 3]. The second person still needs to withdraw an 
 amount of 4. They withdraw an amount of 3 in their second turn and waits for their 
 next turn to arrive to withdraw the remaining amount of 1.
-5. The queue now looks like [3, 2]. The third person withdraws the remaining amount of 
+#. The queue now looks like [3, 2]. The third person withdraws the remaining amount of 
 1 and leaves the queue.
-6. The queue now looks like [2]. The second person withdraws the remaining amount 
+#. The queue now looks like [2]. The second person withdraws the remaining amount 
 of 1 and leaves the queue.
-7. The queue is now empty.
+#. The queue is now empty.
 The order in which people leave the queue is [1, 3, 2].
 
 In Sample Case #2, there are 5 people and the limit to withdraw in one turn is 6. Below 
