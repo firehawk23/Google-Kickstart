@@ -4,8 +4,7 @@ A new art museum is about to open! It is a single-story building in the shape of
 
 Each room is identified by two numbers: the row of the building it is in (counting from top to bottom, starting from 1), followed by its position within that row (counting from left to right, starting from 1). Here is an example of how the rooms are connected and labeled when S = 3:
 
-    .. image:: example.png
-    :align: center
+   .. image:: example.png
 
 Alma and Berthe are artists who are painting the rooms of the museum. Alma starts in the room (RA, PA), and Berthe starts in a different room (RB, PB). Each of them has already painted their starting room. C of the other rooms of the museum are under construction, and neither Alma nor Berthe is allowed to enter these rooms or paint them.
 
@@ -60,12 +59,12 @@ Sample
 
 In Sample Case #1, the turns must proceed as follows:
 
-Alma moves to room (2, 2).
-Berthe cannot move.
-Alma moves to room (2, 3).
-Berthe still cannot move.
-Alma cannot move. Since neither painter can move, the game is now over.
-Alma has painted 3 rooms and Berthe has painted 1 room, so the score is 3 - 1 = 2.
+1. Alma moves to room (2, 2).
+2. Berthe cannot move.
+3. Alma moves to room (2, 3).
+4. Berthe still cannot move.
+5. Alma cannot move. Since neither painter can move, the game is now over.
+6. Alma has painted 3 rooms and Berthe has painted 1 room, so the score is 3 - 1 = 2.
 
 In Sample Case #2, neither painter can move. They only paint their starting rooms.
 
@@ -78,18 +77,21 @@ The following additional cases could not appear in Test Set 1, but could appear 
 3 3 2 2 3 2
 2 1
 3 1
+
 The correct output for these two cases would be:
 
 Case #1: 0
+
 Case #2: -1
+
 In Case #1, Alma can move to (3, 5) or (3, 3). She cannot move to (2, 3), which is under construction.
 
-If she moves to (3, 5), she will have no more moves and Berthe will go on to paint two more rooms. Score: 2 - 3 = -1.
-If Alma moves to (3, 3), then Berthe can do one of the following:
-Move to (3, 2), leaving neither painter with any future moves. Score: 2 - 2 = 0.
-Move to (2, 2). Then the rest of the game must play out as follows: Alma moves to (3, 2), Berthe moves to (1, 1). Score: 3 - 3 = 0.
+- If she moves to (3, 5), she will have no more moves and Berthe will go on to paint two more rooms. Score: 2 - 3 = -1.
+- If Alma moves to (3, 3), then Berthe can do one of the following:
+    - Move to (3, 2), leaving neither painter with any future moves. Score: 2 - 2 = 0.
+    - Move to (2, 2). Then the rest of the game must play out as follows: Alma moves to (3, 2), Berthe moves to (1, 1). Score: 3 - 3 = 0.
 So Alma knows that moving to (3, 3) guarantees a score of 0 no matter what Berthe does, which is better than the score of -1 that she would get by moving to (3, 5). Therefore, Alma moves to (3, 3). Notice that:
 
-We do not know exactly how the rest of this game will play out, but we do know the best score that Alma can guarantee.
-It is possible that one or more rooms that are not under construction do not get painted.
+- We do not know exactly how the rest of this game will play out, but we do know the best score that Alma can guarantee.
+- It is possible that one or more rooms that are not under construction do not get painted.
 In Case #2, Alma must move to (3, 3), and then it is better for Berthe to move to (3, 4) than to (2, 2).
