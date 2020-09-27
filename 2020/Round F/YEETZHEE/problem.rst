@@ -1,42 +1,50 @@
 Problem
 -------
-There are N people numbered from 1 to N, standing in a queue to withdraw money 
-from an ATM. The queue is formed in ascending order of their number. The person 
-numbered i wants to withdraw amount Ai. The maximum amount a person can 
-withdraw at a time is X. If they need more money than X, they need to go stand at the 
-end of the queue and wait for their turn in line. A person leaves the queue once they 
-have withdrawn the required amount.
+Pommel is very bored at home so she has invented a new game involving N dice. Each die has the numbers from 1 to M written on it. Whenever she throws a die, it has an equal probability of landing on each of the M possible values.
 
-You need to find the order in which all the people leave the queue.
+Pommel places all the dice in a row. She goes through the dice one at a time from left to right. For each die she rolls, Pommel can either keep the value she rolled and move on to the next die or she can re-roll the die. Pommel can re-roll a die as much as she wants before moving on to the next die.
+
+Once Pommel has gone through all the dice, the game is finished. To determine if she has won, she puts the dice into groups. All dice with the same value are put into the same group. So if she finishes the game with x distinct values, then there will be x groups. These groups of dice are then sorted by number of dice in non-decreasing order.
+
+For example:
+If the final dice results are [2, 2, 3, 2, 2, 3], the dice would be put into two groups and ordered as follows: [3, 3] and [2, 2, 2, 2].
+If the final dice results are [1, 6, 7, 7], the dice would be put into three groups and ordered as follows: [6], [1], and [7, 7] (or equivalently, [1], [6] and [7, 7]).
+
+Pommel wins if she finishes the game with exactly K groups, and the i-th group contains exactly Ai dice, for all i.
+
+What is the expected value of the total number of dice rolls it will take Pommel to win the game, assuming she plays optimally to minimize this expected value?
+
+It is guaranteed that for any valid input, it is possible for Pommel to win the game.
 
 Input
 -----
-The first line of the input gives the number of test cases T. T test cases follow.
-
-The first line of each test case gives two space separated integers: the number of people standing in the queue, N and the maximum amount X that can be withdrawn in one turn.
-The next line contains N space separated integers Ai.
+The first line of the input gives the number of test cases, T. T test cases follow. The first line of each test case contains the integers N, M and K. Then, K lines follow describing the groups she must finish with. The i-th line contains Ai.
 
 Output
 ------
-For each test case, output one line containing Case #x: y, where x is the test case number (starting from 1) and y is the space separated list of integers that denote the order in which the people leave the queue.
+For each test case, output one line containing Case #x: y, where x is the test case number (starting from 1) and y is the expected number of times it will take to roll all the dice for Pommel to win the game.
+
+y will be considered correct if it is within an absolute or relative error of 10-6 of the correct answer. See the FAQ for an explanation of what that means, and what formats of real numbers we accept.
 
 Limits
 ------
 | Time limit: 20 seconds per test set.
 | Memory limit: 1GB.
-| 1 ≤ T ≤ 100.
+| 1 ≤ T ≤ 100.
+| 1 ≤ K ≤ M.
+| 1 ≤ Ai, for all i.
+| A1 + A2 + ... + AK = N.
+| Ai ≤ Ai+1, for all i.
 
 Test Set 1
 ~~~~~~~~~~~
-| 1 ≤ **N** ≤ 100.
-| 1 ≤ **Ai** ≤ 100.
-| 1 ≤ **X** ≤ 100.
+| 2 ≤ N ≤ 6.
+| 2 ≤ M ≤ 6.
 
 Test Set 2
 ~~~~~~~~~~
-| 1 ≤ **N** ≤ 105 for at most 10 test cases. For the remaining cases, 1 ≤ N ≤ 100
-| 1 ≤ **Ai** ≤ 109.
-| 1 ≤ **X** ≤ 109.
+| 2 ≤ N ≤ 50.
+| 2 ≤ M ≤ 50.
 
 Sample
 ------
@@ -44,56 +52,19 @@ Sample
 
     Input           Output
     2
-    3 3
-    2 7 4           Case #1: 1 3 2
-    5 6             Case #2: 3 5 1 2 4
-    9 10 4 7 2
+    3 6 2
+    1               Case #1: 4.7
+    2               Case #2: 9.0
+    5 2 1
+    5
 
-In Sample Case #1, there are 3 people and the limit to withdraw in one turn is 3. Below 
-is step-by-step description of how the process will look like:
+In Sample case #1, Pommel has N = 3 dice, each with a number from 1 to M = 6 written on them. To win, she must finish the game with K = 2 groups. One group must have one die (A1 = 1), while the other group must have two dice (A2 = 2). One optimal strategy for Pommel is as follows:
+- Pommel throws the first die once.
+- Pommel throws the second die once.
+- If the first and second dice are the same, Pommel keeps throwing the third die until it ends in a different value from the first two. It takes 1.2 dice rolls on average.
+- If the first and second dice are different, Pommel keeps throwing the third die until it matches the first or the second die. It takes 3 dice rolls on average.
+This strategy takes Pommel 4.7 (1 + 1 + 1/6 × 1.2 + 5/6 × 3) dice rolls on average.
 
-1. The queue initially looks like [1, 2, 3]. The first person withdraws an amount of 2 in 
-their first attempt and leaves the queue.
+In Sample case #2, Pommel has N = 5 dice, each with a number from 1 to M = 2 written on them. To win, she must finish the game with K = 1 group, with all N dice in them (A1 = N). For the first die, Pommel rolls it once. Then, for each remaining die she keeps rolling until it has the same value as the first one. It takes 2 dice rolls on average.
 
-2. The queue now looks like [2, 3]. The second person wants to withdraw an amount of 
-7, but they can withdraw only 3 in their first turn. Since they still need to withdraw an 
-amount of 4, they have to rejoin the queue at the end of the line.
-
-3. The queue now looks like [3, 2]. The third person needs to withdraw an amount of 4 
-but they can only withdraw 3 in their first turn so, they rejoin the queue at the end of 
-the line to withdraw amount of 1 later.
-
-4. The queue now looks like [2, 3]. The second person still needs to withdraw an 
-amount of 4. They withdraw an amount of 3 in their second turn and waits for their 
-next turn to arrive to withdraw the remaining amount of 1.
-
-5. The queue now looks like [3, 2]. The third person withdraws the remaining amount of 
-1 and leaves the queue.
-
-6. The queue now looks like [2]. The second person withdraws the remaining amount 
-of 1 and leaves the queue.
-
-7. The queue is now empty.
-The order in which people leave the queue is [1, 3, 2].
-
-In Sample Case #2, there are 5 people and the limit to withdraw in one turn is 6. Below 
-is step-by-step description of how the process will look like:
-
-1. The queue initially looks like [1, 2, 3, 4, 5]. The first person withdraws an amount of 6, 
-and joins at the end again to withdraw the remaining amount of 3 later.
-
-2. The queue looks like [2, 3, 4, 5, 1]. The second person similarly withdraws an amount 
-of 6 and waits for his next turn to withdraw an amount of 4.
-
-3. The queue looks like [3, 4, 5, 1, 2]. The third person withdraws an amount of 4 and 
-leaves the queue.
-
-4. The queue now looks like [4, 5, 1, 2]. The fourth person withdraws 6 and waits for his 
-next turn.
-
-5. The queue looks like [5, 1, 2, 4]. The fifth person withdraws amount of 2 and leaves 
-the queue.
-
-6. The queue looks like, [1, 2, 4]. All other people now leave the queue after their 
-second turn one by one.
-The order in which people leave the queue is [3, 5, 1, 2, 4].
+This strategy takes Pommel 9 (1 + 2 + 2 + 2 + 2) dice rolls on average.
