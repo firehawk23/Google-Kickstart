@@ -25,14 +25,18 @@ Limits
 | Time limit: 20 seconds per test set.
 | Memory limit: 1GB.
 | 1 ≤ T ≤ 100.
-| Test Set 1
-| 1 ≤ N ≤ 100.
-| 1 ≤ Ai ≤ 100.
-| 1 ≤ X ≤ 100.
-| Test Set 2
-| 1 ≤ N ≤ 105 for at most 10 test cases. For the remaining cases, 1 ≤ N ≤ 100
-| 1 ≤ Ai ≤ 109.
-| 1 ≤ X ≤ 109.
+
+Test Set 1
+~~~~~~~~~~~
+| 1 ≤ **N** ≤ 100.
+| 1 ≤ **Ai** ≤ 100.
+| 1 ≤ **X** ≤ 100.
+
+Test Set 2
+~~~~~~~~~~
+| 1 ≤ **N** ≤ 105 for at most 10 test cases. For the remaining cases, 1 ≤ N ≤ 100
+| 1 ≤ **Ai** ≤ 109.
+| 1 ≤ **X** ≤ 109.
 
 Sample
 ------
@@ -47,36 +51,36 @@ Sample
 
 In Sample Case #1, there are 3 people and the limit to withdraw in one turn is 3. Below 
 is step-by-step description of how the process will look like:
-1.The queue initially looks like [1, 2, 3]. The first person withdraws an amount of 2 in 
+1. The queue initially looks like [1, 2, 3]. The first person withdraws an amount of 2 in 
 their first attempt and leaves the queue.
-2.The queue now looks like [2, 3]. The second person wants to withdraw an amount of 
+2. The queue now looks like [2, 3]. The second person wants to withdraw an amount of 
 7, but they can withdraw only 3 in their first turn. Since they still need to withdraw an 
 amount of 4, they have to rejoin the queue at the end of the line.
-3.The queue now looks like [3, 2]. The third person needs to withdraw an amount of 4 
+3. The queue now looks like [3, 2]. The third person needs to withdraw an amount of 4 
 but they can only withdraw 3 in their first turn so, they rejoin the queue at the end of 
 the line to withdraw amount of 1 later.
-4.The queue now looks like [2, 3]. The second person still needs to withdraw an 
+4. The queue now looks like [2, 3]. The second person still needs to withdraw an 
 amount of 4. They withdraw an amount of 3 in their second turn and waits for their 
 next turn to arrive to withdraw the remaining amount of 1.
-5.The queue now looks like [3, 2]. The third person withdraws the remaining amount of 
+5. The queue now looks like [3, 2]. The third person withdraws the remaining amount of 
 1 and leaves the queue.
-6.The queue now looks like [2]. The second person withdraws the remaining amount 
+6. The queue now looks like [2]. The second person withdraws the remaining amount 
 of 1 and leaves the queue.
-7.The queue is now empty.
+7. The queue is now empty.
 The order in which people leave the queue is [1, 3, 2].
 
 In Sample Case #2, there are 5 people and the limit to withdraw in one turn is 6. Below 
 is step-by-step description of how the process will look like:
-1.The queue initially looks like [1, 2, 3, 4, 5]. The first person withdraws an amount of 6, 
+1. The queue initially looks like [1, 2, 3, 4, 5]. The first person withdraws an amount of 6, 
 and joins at the end again to withdraw the remaining amount of 3 later.
-2.The queue looks like [2, 3, 4, 5, 1]. The second person similarly withdraws an amount 
+2. The queue looks like [2, 3, 4, 5, 1]. The second person similarly withdraws an amount 
 of 6 and waits for his next turn to withdraw an amount of 4.
-3.The queue looks like [3, 4, 5, 1, 2]. The third person withdraws an amount of 4 and 
+3. The queue looks like [3, 4, 5, 1, 2]. The third person withdraws an amount of 4 and 
 leaves the queue.
-4.The queue now looks like [4, 5, 1, 2]. The fourth person withdraws 6 and waits for his 
+4. The queue now looks like [4, 5, 1, 2]. The fourth person withdraws 6 and waits for his 
 next turn.
-5.The queue looks like [5, 1, 2, 4]. The fifth person withdraws amount of 2 and leaves 
+5. The queue looks like [5, 1, 2, 4]. The fifth person withdraws amount of 2 and leaves 
 the queue.
-6.The queue looks like, [1, 2, 4]. All other people now leave the queue after their 
+6. The queue looks like, [1, 2, 4]. All other people now leave the queue after their 
 second turn one by one.
 The order in which people leave the queue is [3, 5, 1, 2, 4].
