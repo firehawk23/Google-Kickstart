@@ -1,27 +1,35 @@
 Analysis
 --------
-Firstly, denote Ki as the number of times a person will use the ATM. Formally, Ki = ⌈Ai / X⌉.
+First, note that Pommel can always win the game in a finite number of moves on expectation. To do so for a given input sequence A1, A2, ... AK, Pommel can simply reroll until the first A1 dice land on 1, the next A2 dice land on 2, and so on, with the last AK dice landing on K. Such an outcome satisfies the group arrangement required by the input; furthermore, on each roll, Pommel has a 1/M chance of rolling the needed value for the die she's on. This implies that Pommel is expected to win in N×M turns. Although this may not be optimal, it demonstrates that Pommel always has a winning strategy.
+
+The basic procedure for calculating the expected value is the same for any approach. Suppose Pommel has already rolled and fixed some (potentially zero) dice. Furthermore, suppose she chooses a set S of dice configurations, such that she will not re-roll her current die if her dice configuration, after her current role, is in S. If there is a pi probability that her current dice configuration leads to the i-th element of S, then there is a 1 - Σ pi probability that Pommel will have to re-roll. If we now let ei equal the expected number of moves to win starting from state i, assuming Pommel plays optimally, we can solve for the expected number of moves to win starting from Pommel's current dice configuration. If we let this quantity be x:
+
+x = 1 + (1 - Σ pi)x + Σ piei
+
+x = (1 + Σ piei) / (Σ pi)
+
+Approaches to the two tests sets differ in how they may enumerate the possible dice configurations and how they find the optimal set S for any given configuration.
 
 Test Set 1
 **********
-We can directly simulate the process using a queue.
+For this test set it's sufficient to look at all dice roll results directly. There are at most Σ0≤i≤NMi < 60,000 such possibilities. For a given configuration, performing another roll leads to one of M new dice configurations, so for each configuration we can loop through all 2M-1 possible non-empty subsets of configurations that Pommel could choose to not re-roll on (ignoring subsets that contain configurations that make it impossible for Pommel to reach a winning configuration). For each choice of subset, we compute Pommel's expected turns until winning, and we take the subset with the lowest expected value.
 
-Assume that i-th person, that wants to withdraw Ai, is first in the queue. There are two possibilites:
+We iterate over the dice configurations in descending order of number of locked dice: we start with the N-dice configurations, then do the N-1 dice configurations, and so on, until we get to the empty dice configuration. The expected value from the empty configuration is our answer. This algorithm runs in O(MN×2M×M) time which is sufficient.
 
-- Ai ≤ X. In that case, this person withdraws Ai and leaves the queue. We can add i to the answer.
-- Ai > X. In that case, this person withdraws X (thus setting Ai to Ai - X) and goes back to the end of the queue.
-Time complexity of this simulation is O(Σ Ki).
+As an example, consider the test case N = 3, M = 2, K = 2, A1 = 1, A2 = 2. Let's compute Pommel's expected turns from winning when she's rolled and locked down a 1. There are two possibilities for the dice configuration after her next turn: [1, 1] and [1, 2], each occuring with probability 1/2. By the time we process the configuration [1], we have already processed all two-roll configurations, so we know that on expectation, it takes two moves to win from [1, 1] and one move to win from [1, 2]. We now consider the three possibilies for S: {[1, 1]}, {[1, 2]}, and {[1, 1], [1, 2]}.
 
-In the worst case, when X = 1, Ki = Ai. Since Ai ≤ 100, the worst time complexity is O(N × 100), which easily fits into the time limit.
+S = {[1, 1]} leads to the equation x = 1 + (1 - 0.5) x + 0.5 · 2, which results in x = 4.
+
+S = {[1, 2]} leads to the equation x = 1 + (1 - 0.5) x + 0.5 · 1, which results in x = 3.
+
+S = {[1, 1], [1, 2]} leads to the equation x = 1 + (1 - 0.5 - 0.5) x + 0.5 · 1 + 0.5 · 2, which results in x = 2.5. This is the lowest value, so we now know that if Pommel has rolled a single 1, she will win in 2.5 more turns on expectation if she plays optimally.
 
 Test Set 2
 **********
-In the second test set, Ki can be as big as 109, so direct simulation is too slow.
+For this test set, the number of possible dice roll outcomes, 50^50, is far too large to be enumerated in time. We instead focus on the groupings of dice that could possibly lead to the desired configuration. For example, if Pommel rolls [1, 1, 2, 2] or if she rolls [3, 4, 3, 4], either way, she'll have two groups of two dice, which are equivalent for this problem. A dice grouping can be expressed as a K-tuple of integers (x1, x2, ..., xK) such that the tuple elements are non-decreasing: xi ≤ xi+1 for 1 ≤ i < K. The i-th element of the tuple expresses the number of dice in the i-th smallest dice group, which is zero if there are fewer than K non-empty groups in the current dice configuration. For example, if K=3 and the dice results so far are [2, 2, 3, 2, 2, 3], the grouping can be expressed as (0, 2, 4).
 
-Let's look at two people i and j. When will i-th person leave the queue before j-th person? There are two cases:
+We need to count how many possible K-tuples we need to consider to get an estimate of our algorithm's runtime. One simple bound is that we only need to consider a tuple T if the sum of T's elements is at most K. The total number of tuples we need to consider is therefore at most Σ0≤i≤Kp(i) where p(i) is the number of K-tuples whose elements are non-decreasing and add to i. p(i) can be calculated with a script, but it is also the i-th partition number. The sum of the first 50 partition numbers is only slightly more than a million, which is very tractable.
 
-- Ki < Kj. Since i-th person will use the ATM fewer times than j-th person, they will leave the queue earlier.
-- Ki = Kj and i < j. If they both use the ATM the same amount of times, the person earlier in the queue in the initial configuration will leave first.
-This observation is enough to form a full solution. Sort people first in ascending order of Ki, and in case of ties in ascending order of their number. After sorting, this is our answer.
+A dice roll could lead transition Pommel from a given configuration to at most K new configurations. We now need a way of computing the optimal subset of new configurations S to not re-roll that is faster than the naive O(K × 2^K) approach. Consider the expected value equation shown above. First, note that if for some i, ei > x, removing configuration i from S will decrease the value of x. Similarly, if there is some configuration C with expected value E[C] < x that is not included in S, adding it to S will lower x. This implies that if some configuration C with expected value E[C] is in S, then all states C' with E[C'] < E[C] must also be in S if Pommel is playing optimally. We can therefore sort all configurations reachable from a given configuration so that they're in ascending order of expected turns until winning. It is guaranteed that the optimal S is a prefix of the sorted list, so it can be found by sorting and iterating over the list in O(K log K) time. However, in order to generate this list, we have to look up each new configuration's K-tuple in a hash map to get its respective ei. Hashing a K-tuple takes O(K) time, and we have up to K tuples to look up, so we can expect to spend O(K2) time computing the optimal expected value for each dice configuration.
 
-Time complexity of this solution is O(N log N).
+This leads to an overall algorithm runtime of O(K^2 × (number of possible K-tuples)), which for our input sizes is on the order of 50 million.
