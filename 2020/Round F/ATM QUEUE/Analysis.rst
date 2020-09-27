@@ -3,7 +3,7 @@ Analysis
 Firstly, denote Ki as the number of times a person will use the ATM. Formally, Ki = ⌈Ai / X⌉.
 
 Test Set 1
---------
+**********
 We can directly simulate the process using a queue.
 
 Assume that i-th person, that wants to withdraw Ai, is first in the queue. There are two possibilites:
@@ -15,7 +15,7 @@ Time complexity of this simulation is O(Σ Ki).
 In the worst case, when X = 1, Ki = Ai. Since Ai ≤ 100, the worst time complexity is O(N × 100), which easily fits into the time limit.
 
 Test Set 2
----------
+**********
 In the second test set, Ki can be as big as 109, so direct simulation is too slow.
 
 Let's look at two people i and j. When will i-th person leave the queue before j-th person? There are two cases:
