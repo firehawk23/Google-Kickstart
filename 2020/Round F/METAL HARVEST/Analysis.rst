@@ -30,6 +30,6 @@ For subsequent intervals:
 
 If the interval is already fully covered with the last_harvest_time, no action is needed.
 
-1. If the interval is not fully covered by the last_harvest_time then follow a similar strategy as first interval to calculate the number of new robots required and again update the last_harvest_time. Also increment the answer by total number of new robots.
+ 1. If the interval is not fully covered by the last_harvest_time then follow a similar strategy as first interval to calculate the number of new robots required and again update the last_harvest_time. Also increment the answer by total number of new robots.
 
  2.Since we are sorting the intervals array and then iterating over all intervals at once, the worst case time complexity will be O(N log N), where N is the total number of intervals.
